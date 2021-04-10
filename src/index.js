@@ -26,7 +26,7 @@ serviceWorkerRegistration.register({
               if ((e.target )?.state === "activated") {
     const t2= Date.now();
     console.log("Reloading now to get the latest version", t2-t1);
-                  window.location.reload();
+                  // window.location.reload();
               }
           });
       }

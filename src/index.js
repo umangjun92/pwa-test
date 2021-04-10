@@ -15,7 +15,23 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
-serviceWorkerRegistration.unregister();
+serviceWorkerRegistration.register({
+  onUpdate: (reg) => {
+    const t1= Date.now();
+      console.log("New update avalaible");
+      const registrationWaiting = reg.waiting;
+      if (registrationWaiting) {
+          registrationWaiting.postMessage({ type: "SKIP_WAITING" });
+          registrationWaiting.addEventListener("statechange", (e) => {
+              if ((e.target )?.state === "activated") {
+    const t2= Date.now();
+    console.log("Reloading now to get the latest version", t2-t1);
+                  window.location.reload();
+              }
+          });
+      }
+  }
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

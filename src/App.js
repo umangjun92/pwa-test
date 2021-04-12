@@ -68,6 +68,7 @@ function App() {
     // if(swReg){
       (async () => {
         const newVal = process.env.REACT_APP_V;
+        console.log("new ver", newVal);
         const cache = await caches.open("v-cache");
         if (window.localStorage.getItem("ua")) {
           const shouldUpdate = window.confirm("install update?");
@@ -80,6 +81,7 @@ function App() {
           }
         } else {
           const oldVal = await (await cache?.match("test"))?.json();
+          console.log("old ver", oldVal)
           if (String(oldVal) !== String(newVal)) {
             const shouldUpdate = window.confirm("install update?");
             if (shouldUpdate) {
@@ -100,7 +102,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 19 <code>src/App.js</code> and save to reload.
+          Edit 20 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

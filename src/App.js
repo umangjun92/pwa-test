@@ -4,7 +4,8 @@ import "./App.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const getNewUpdate = async (swReg) => {
-  await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
+  const x = await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
+  console.log("cahced dele", x)
   window.location.reload();
 
   // const regWaiting = swReg?.waiting;
@@ -64,7 +65,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if(swReg){
+    // if(swReg){
       (async () => {
         const newVal = process.env.REACT_APP_V;
         const cache = await caches.open("v-cache");
@@ -91,15 +92,15 @@ function App() {
           }
         }
       })();  
-    }
-  },[swReg])
+    // }
+  },[])
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 15 <code>src/App.js</code> and save to reload.
+          Edit 17 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

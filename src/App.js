@@ -3,55 +3,33 @@ import logo from "./logo.svg";
 import "./App.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
+const getNewUpdate = (swReg) => {
+  const regWaiting = swReg?.waiting;
+  if (regWaiting) {
+    regWaiting.postMessage({ type: "SKIP_WAITING" });
+    regWaiting.addEventListener("statechange", (e) => {
+      if (e.target?.state === "activated") {
+        // const t2 = Date.now();
+        // console.log("Reloading now to get the latest version", t2 - t1);
+        window.location.reload();
+      }
+    });
+  }
+};
+
 function App() {
   const [swReg, setSwReg] = useState();
 
-  const getNewUpdate = () => {
-    const regWaiting = swReg?.waiting;
-    if (regWaiting) {
-      regWaiting.postMessage({ type: "SKIP_WAITING" });
-      regWaiting.addEventListener("statechange", (e) => {
-        if (e.target?.state === "activated") {
-          // const t2 = Date.now();
-          // console.log("Reloading now to get the latest version", t2 - t1);
-          window.location.reload();
-        }
-      });
-    }
-  };
+
 
   useEffect(() => {
-    (async () => {
-      const newVal = process.env.REACT_APP_V;
-      const cache = await caches.open("v-cache");
-      if (window.localStorage.getItem("ua")) {
-        const shouldUpdate = window.confirm("install update?");
-        if (shouldUpdate) {
-          getNewUpdate();
-          await cache?.put("test", new Response(newVal));
-          window.localStorage.removeItem("ua");
-        } else {
-          window.localStorage.setItem("ua", "1");
-        }
-      } else {
-        const oldVal = await (await cache?.match("test"))?.json();
-        if (oldVal !== newVal) {
-          const shouldUpdate = window.confirm("install update?");
-          if (shouldUpdate) {
-            getNewUpdate();
-            await cache?.put("test", new Response(newVal));
-            window.localStorage.removeItem("ua");
-          } else {
-            window.localStorage.setItem("ua", "1");
-          }
-        }
-      }
-    })();
-
+    const t1 = Date.now();
     serviceWorkerRegistration.register({
       onSuccess: (reg) => {
         setSwReg(reg);
         console.log("reg", reg);
+        const t1 = Date.now();
+
       },
       //   // onUpdate: async (reg) => {
       //   //   const t1 = Date.now();
@@ -80,12 +58,43 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    if(swReg){
+      (async () => {
+        const newVal = process.env.REACT_APP_V;
+        const cache = await caches.open("v-cache");
+        if (window.localStorage.getItem("ua")) {
+          const shouldUpdate = window.confirm("install update?");
+          if (shouldUpdate) {
+            getNewUpdate(swReg);
+            await cache?.put("test", new Response(newVal));
+            window.localStorage.removeItem("ua");
+          } else {
+            window.localStorage.setItem("ua", "1");
+          }
+        } else {
+          const oldVal = await (await cache?.match("test"))?.json();
+          if (String(oldVal) !== String(newVal)) {
+            const shouldUpdate = window.confirm("install update?");
+            if (shouldUpdate) {
+              getNewUpdate(swReg);
+              await cache?.put("test", new Response(newVal));
+              window.localStorage.removeItem("ua");
+            } else {
+              window.localStorage.setItem("ua", "1");
+            }
+          }
+        }
+      })();  
+    }
+  },[swReg])
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 8 <code>src/App.js</code> and save to reload.
+          Edit 9 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

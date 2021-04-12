@@ -5,7 +5,7 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const getNewUpdate = async (swReg) => {
   // const x = await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
-  console.log("cahced dele", x)
+  // console.log("cahced dele", x)
   window.location.reload(true);
 
   // const regWaiting = swReg?.waiting;

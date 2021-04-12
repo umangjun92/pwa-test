@@ -30,39 +30,39 @@ function App() {
 
   useEffect(() => {
     const t1 = Date.now();
-    serviceWorkerRegistration.register({
-      onSuccess: (reg) => {
-        setSwReg(reg);
-        console.log("reg", reg);
-        const t2 = Date.now();
-        console.log("time to success", t2 -t1)
-      },  
-      //   // onUpdate: async (reg) => {
-      //   //   const t1 = Date.now();
-      //   //   console.log("New update avalaible");
-      //   //   const cache = await caches.open("v-cache");
-      //   //   const oldVal = (await (await cache?.match("test"))?.json());
-      //   //   await cache?.put("test", new Response(oldVal ? Number(oldVal) +1 : 1))
-      //   //   const shouldUpdate = window.confirm("Update");
-      //   //   if(shouldUpdate){
-      //   //     const registrationWaiting = reg.waiting;
-      //   //     if (registrationWaiting) {
-      //   //       registrationWaiting.postMessage({ type: "SKIP_WAITING" });
-      //   //       registrationWaiting.addEventListener("statechange", (e) => {
-      //   //         if (e.target?.state === "activated") {
-      //   //           const t2 = Date.now();
-      //   //           console.log("Reloading now to get the latest version", t2 - t1);
+  //   serviceWorkerRegistration.register({
+  //     onSuccess: (reg) => {
+  //       setSwReg(reg);
+  //       console.log("reg", reg);
+  //       const t2 = Date.now();
+  //       console.log("time to success", t2 -t1)
+  //     },  
+  //     //   // onUpdate: async (reg) => {
+  //     //   //   const t1 = Date.now();
+  //     //   //   console.log("New update avalaible");
+  //     //   //   const cache = await caches.open("v-cache");
+  //     //   //   const oldVal = (await (await cache?.match("test"))?.json());
+  //     //   //   await cache?.put("test", new Response(oldVal ? Number(oldVal) +1 : 1))
+  //     //   //   const shouldUpdate = window.confirm("Update");
+  //     //   //   if(shouldUpdate){
+  //     //   //     const registrationWaiting = reg.waiting;
+  //     //   //     if (registrationWaiting) {
+  //     //   //       registrationWaiting.postMessage({ type: "SKIP_WAITING" });
+  //     //   //       registrationWaiting.addEventListener("statechange", (e) => {
+  //     //   //         if (e.target?.state === "activated") {
+  //     //   //           const t2 = Date.now();
+  //     //   //           console.log("Reloading now to get the latest version", t2 - t1);
 
-      //   //           window.location.reload();
-      //   //         }
-      //   //       });
-      //   //     }
-      //   //   }else {
-      //   //     window.localStorage.setItem("ua", "1")
-      //   //   }
-      //   // },
-    });
-  }, []);
+  //     //   //           window.location.reload();
+  //     //   //         }
+  //     //   //       });
+  //     //   //     }
+  //     //   //   }else {
+  //     //   //     window.localStorage.setItem("ua", "1")
+  //     //   //   }
+  //     //   // },
+  //   });
+  // }, []);
 
   useEffect(() => {
     // if(swReg){
@@ -102,7 +102,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 21 <code>src/App.js</code> and save to reload.
+          Edit 14 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

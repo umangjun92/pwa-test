@@ -71,7 +71,7 @@ function registerValidSW(swUrl, config) {
           return;
         }
         const t2 = Date.now();
-        console.log("time 1", t2 -t1)
+        // console.log("time 1", t2 -t1)
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
@@ -79,7 +79,7 @@ function registerValidSW(swUrl, config) {
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
               const t3 = Date.now();
-              console.log("time 2", t3 -t2);
+              // console.log("time 2", t3 -t2);
               console.log(
                 'New content is available and will be used when all ' +
                   'tabs for this page are closed. See https://cra.link/PWA.'
@@ -88,7 +88,7 @@ function registerValidSW(swUrl, config) {
               // Execute callback
               if (config && config.onUpdate) {
                 const t4 = Date.now();
-              console.log("time 3", t4 -t3)
+              // console.log("time 3", t4 -t3)
                 config.onUpdate(registration);
               }
             } else {

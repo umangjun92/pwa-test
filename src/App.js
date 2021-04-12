@@ -5,6 +5,7 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const getNewUpdate = (swReg) => {
   const regWaiting = swReg?.waiting;
+  console.log("regWaititn", regWaiting)
   if (regWaiting) {
     regWaiting.postMessage({ type: "SKIP_WAITING" });
     regWaiting.addEventListener("statechange", (e) => {
@@ -28,9 +29,9 @@ function App() {
       onSuccess: (reg) => {
         setSwReg(reg);
         console.log("reg", reg);
-        const t1 = Date.now();
-
-      },
+        const t2 = Date.now();
+        console.log("time to success", t2 -t1)
+      },  
       //   // onUpdate: async (reg) => {
       //   //   const t1 = Date.now();
       //   //   console.log("New update avalaible");
@@ -94,7 +95,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 9 <code>src/App.js</code> and save to reload.
+          Edit 10 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

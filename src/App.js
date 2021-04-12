@@ -28,8 +28,8 @@ function App() {
 
 
 
-  useEffect(() => {
-    const t1 = Date.now();
+  // useEffect(() => {
+  //   const t1 = Date.now();
   //   serviceWorkerRegistration.register({
   //     onSuccess: (reg) => {
   //       setSwReg(reg);

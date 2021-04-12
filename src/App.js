@@ -4,9 +4,9 @@ import "./App.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const getNewUpdate = async (swReg) => {
-  const x = await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
+  // const x = await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
   console.log("cahced dele", x)
-  window.location.reload();
+  window.location.reload(true);
 
   // const regWaiting = swReg?.waiting;
   // console.log("regWaititn", regWaiting)
@@ -102,7 +102,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 14 <code>src/App.js</code> and save to reload.
+          Edit 15 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

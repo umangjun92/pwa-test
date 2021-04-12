@@ -3,19 +3,23 @@ import logo from "./logo.svg";
 import "./App.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
-const getNewUpdate = (swReg) => {
-  const regWaiting = swReg?.waiting;
-  console.log("regWaititn", regWaiting)
-  if (regWaiting) {
-    regWaiting.postMessage({ type: "SKIP_WAITING" });
-    regWaiting.addEventListener("statechange", (e) => {
-      if (e.target?.state === "activated") {
-        // const t2 = Date.now();
-        // console.log("Reloading now to get the latest version", t2 - t1);
-        window.location.reload();
-      }
-    });
-  }
+const getNewUpdate = async (swReg) => {
+  await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
+  window.location.reload();
+
+  // const regWaiting = swReg?.waiting;
+  // console.log("regWaititn", regWaiting)
+  // if (regWaiting) {
+  //   regWaiting.postMessage({ type: "SKIP_WAITING" });
+  //   regWaiting.addEventListener("statechange", (e) => {
+  //     if (e.target?.state === "activated") {
+  //       // const t2 = Date.now();
+  //       // console.log("Reloading now to get the latest version", t2 - t1);
+
+  //       window.location.reload();
+  //     }
+  //   });
+  // }
 };
 
 function App() {
@@ -95,7 +99,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 12 <code>src/App.js</code> and save to reload.
+          Edit 14 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

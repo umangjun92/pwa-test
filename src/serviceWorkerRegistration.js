@@ -56,13 +56,21 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
+      if (navigator.vendor === 'Apple Computer, Inc.') {
+				console.log('Safari!!!!');
+				if (registration.waiting) {
+					if (config && config.onUpdate) {
+						config.onUpdate(registration);
+					}
+				}
+			}
       const t1 = Date.now();
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {
           return;
         }
-      const t2 = Date.now();
+        const t2 = Date.now();
         console.log("time 1", t2 -t1)
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {

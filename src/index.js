@@ -22,7 +22,7 @@ serviceWorkerRegistration.register({
     const cache = await caches.open("v-cache");
     const oldVal = (await (await cache.match("test")).json());
     await cache.put("test", new Response(oldVal ? Number(oldVal) +1 : 1))
-    const shouldUpdate = confirm("Update");
+    const shouldUpdate = window.confirm("Update");
     if(shouldUpdate){
       const registrationWaiting = reg.waiting;
       if (registrationWaiting) {

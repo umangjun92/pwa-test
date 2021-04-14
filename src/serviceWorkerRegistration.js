@@ -80,9 +80,9 @@ const getNewUpdate = async (regWaiting) => {
 function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
-    .then((registration) => {
+    .then(async (registration) => {
       if (registration.waiting) {
-        (async () => {
+        // (async () => {
           const newVal = (
             await (
               await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")
@@ -115,7 +115,7 @@ function registerValidSW(swUrl, config) {
               }
             }
           }
-        })();
+        // })();
       }
 
       if (navigator.vendor === "Apple Computer, Inc.") {

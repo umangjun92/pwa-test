@@ -9,7 +9,7 @@ const getNewUpdate = async (swReg) => {
   // window.location.reload(true);
   console.log("installing new update");
   const reg = (await navigator.serviceWorker.ready);
-  const regWaiting = reg.waiting || reg.active
+  const regWaiting = reg.waiting || reg.active || reg.installing;
   // const regWaiting = swReg?.waiting;
   console.log("regWaititn", regWaiting)
   if (regWaiting) {
@@ -107,7 +107,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 23 <code>src/App.js</code> and save to reload.
+          Edit 24 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

@@ -95,7 +95,7 @@ function registerValidSW(swUrl, config) {
           if (window.localStorage.getItem("ua")) {
             const shouldUpdate = window.confirm("install update?");
             if (shouldUpdate) {
-              getNewUpdate(swReg);
+              getNewUpdate(registration.waiting);
               await cache?.put("test", new Response(newVal));
               window.localStorage.removeItem("ua");
             } else {
@@ -107,7 +107,7 @@ function registerValidSW(swUrl, config) {
             if (String(oldVal) !== String(newVal)) {
               const shouldUpdate = window.confirm("install update?");
               if (shouldUpdate) {
-                getNewUpdate(swReg);
+                getNewUpdate(registration.waiting);
                 await cache?.put("test", new Response(newVal));
                 window.localStorage.removeItem("ua");
               } else {

@@ -65,9 +65,9 @@ function App() {
   useEffect(() => {
     // if(swReg){
     (async () => {
-      const newVal = await (
+      const newVal = (await (
         await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")
-      ).json();
+      ).json()).data.version;
 
       // const newVal = process.env.REACT_APP_V;
       console.log("new ver", newVal);
@@ -104,7 +104,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 16 <code>src/App.js</code> and save to reload.
+          Edit 20 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

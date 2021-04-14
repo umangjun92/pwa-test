@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -26,8 +26,6 @@ const getNewUpdate = async (swReg) => {
 function App() {
   const [swReg, setSwReg] = useState();
 
-
-
   // useEffect(() => {
   //   const t1 = Date.now();
   //   serviceWorkerRegistration.register({
@@ -36,7 +34,7 @@ function App() {
   //       console.log("reg", reg);
   //       const t2 = Date.now();
   //       console.log("time to success", t2 -t1)
-  //     },  
+  //     },
   //     //   // onUpdate: async (reg) => {
   //     //   //   const t1 = Date.now();
   //     //   //   console.log("New update avalaible");
@@ -66,11 +64,27 @@ function App() {
 
   useEffect(() => {
     // if(swReg){
-      (async () => {
-        const newVal = process.env.REACT_APP_V;
-        console.log("new ver", newVal);
-        const cache = await caches.open("v-cache");
-        if (window.localStorage.getItem("ua")) {
+    (async () => {
+      const newVal = await (
+        await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")
+      ).json();
+
+      // const newVal = process.env.REACT_APP_V;
+      console.log("new ver", newVal);
+      const cache = await caches.open("v-cache");
+      if (window.localStorage.getItem("ua")) {
+        const shouldUpdate = window.confirm("install update?");
+        if (shouldUpdate) {
+          getNewUpdate(swReg);
+          await cache?.put("test", new Response(newVal));
+          window.localStorage.removeItem("ua");
+        } else {
+          window.localStorage.setItem("ua", "1");
+        }
+      } else {
+        const oldVal = await (await cache?.match("test"))?.json();
+        console.log("old ver", oldVal);
+        if (String(oldVal) !== String(newVal)) {
           const shouldUpdate = window.confirm("install update?");
           if (shouldUpdate) {
             getNewUpdate(swReg);
@@ -79,23 +93,11 @@ function App() {
           } else {
             window.localStorage.setItem("ua", "1");
           }
-        } else {
-          const oldVal = await (await cache?.match("test"))?.json();
-          console.log("old ver", oldVal)
-          if (String(oldVal) !== String(newVal)) {
-            const shouldUpdate = window.confirm("install update?");
-            if (shouldUpdate) {
-              getNewUpdate(swReg);
-              await cache?.put("test", new Response(newVal));
-              window.localStorage.removeItem("ua");
-            } else {
-              window.localStorage.setItem("ua", "1");
-            }
-          }
         }
-      })();  
+      }
+    })();
     // }
-  },[])
+  }, []);
 
   return (
     <div className="App">

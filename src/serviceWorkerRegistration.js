@@ -54,7 +54,7 @@ export function register(config) {
   }
 }
 
-const getNewUpdate = async (regWaiting) => {
+const getNewUpdate = (regWaiting) => {
   // const x = await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
   // console.log("cahced dele", x)
   // window.location.reload(true);
@@ -96,7 +96,7 @@ function registerValidSW(swUrl, config) {
             const shouldUpdate = window.confirm("install update?");
             if (shouldUpdate) {
               getNewUpdate(registration.waiting);
-              await cache?.put("test", new Response(newVal));
+              cache?.put("test", new Response(newVal));
               window.localStorage.removeItem("ua");
             } else {
               window.localStorage.setItem("ua", "1");
@@ -108,7 +108,7 @@ function registerValidSW(swUrl, config) {
               const shouldUpdate = window.confirm("install update?");
               if (shouldUpdate) {
                 getNewUpdate(registration.waiting);
-                await cache?.put("test", new Response(newVal));
+                cache?.put("test", new Response(newVal));
                 window.localStorage.removeItem("ua");
               } else {
                 window.localStorage.setItem("ua", "1");

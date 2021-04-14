@@ -64,7 +64,7 @@ const getNewUpdate = (regWaiting) => {
   // // const regWaiting = swReg?.waiting;
   console.log("regWaititn", regWaiting);
   if (regWaiting) {
-    regWaiting.skipWaiting?.();
+    regWaiting.skipWaiting && regWaiting.skipWaiting?.();
     regWaiting.addEventListener("statechange", (e) => {
       if (e.target?.state === "activated") {
         // const t2 = Date.now();
@@ -81,7 +81,7 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(async (registration) => {
-      if (registration.waiting) {
+      // if (registration.waiting) {
         // (async () => {
           const newVal = (
             await (
@@ -116,7 +116,7 @@ function registerValidSW(swUrl, config) {
             }
           }
         // })();
-      }
+      // }
 
       if (navigator.vendor === "Apple Computer, Inc.") {
         console.log("Safari!!!!");

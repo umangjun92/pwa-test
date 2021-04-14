@@ -16,13 +16,26 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 
-
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-serviceWorkerRegistration.register()
+serviceWorkerRegistration.register({
+  // onUpdate: (reg) => {
+  //   console.log("New update avalaible");
+  //   const registrationWaiting = reg.waiting;
+  //   if (registrationWaiting) {
+  //     registrationWaiting.postMessage({ type: "SKIP_WAITING" });
+  //     registrationWaiting.addEventListener("statechange", (e) => {
+  //       if (e.target?.state === "activated") {
+  //         console.log("Reloading now to get the latest version");
+  //         window.location.reload();
+  //       }
+  //     });
+  //   }
+  // },
+});
 
 // serviceWorkerRegistration.register({
 //   onSuccess: (reg) => {

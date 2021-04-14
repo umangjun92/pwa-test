@@ -7,23 +7,23 @@ const getNewUpdate = async (swReg) => {
   // const x = await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
   // console.log("cahced dele", x)
   // window.location.reload(true);
-  console.log("installing new update");
-  const reg = (await navigator.serviceWorker.ready);
-  const regWaiting = reg.waiting || reg.active || reg.installing;
-  // const regWaiting = swReg?.waiting;
-  console.log("regWaititn", regWaiting)
-  if (regWaiting) {
-    regWaiting.postMessage({ type: "SKIP_WAITING" });
-    regWaiting.addEventListener("statechange", (e) => {
-      if (e.target?.state === "activated") {
-        // const t2 = Date.now();
-        // console.log("Reloading now to get the latest version", t2 - t1);
-        console.log("update installed");
+  // console.log("installing new update");
+  // const reg = (await navigator.serviceWorker.ready);
+  // const regWaiting = reg.waiting || reg.active || reg.installing;
+  // // const regWaiting = swReg?.waiting;
+  // console.log("regWaititn", regWaiting)
+  // if (regWaiting) {
+  //   regWaiting.postMessage({ type: "SKIP_WAITING" });
+  //   regWaiting.addEventListener("statechange", (e) => {
+  //     if (e.target?.state === "activated") {
+  //       // const t2 = Date.now();
+  //       // console.log("Reloading now to get the latest version", t2 - t1);
+  //       console.log("update installed");
         
-        window.location.reload();
-      }
-    });
-  }
+  //       // window.location.reload();
+  //     }
+  //   });
+  // }
 };
 
 function App() {
@@ -67,38 +67,38 @@ function App() {
 
   useEffect(() => {
     // if(swReg){
-    (async () => {
-      const newVal = (await (
-        await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")
-      ).json()).data.version;
+    // (async () => {
+    //   const newVal = (await (
+    //     await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")
+    //   ).json()).data.version;
 
-      // const newVal = process.env.REACT_APP_V;
-      console.log("new ver", newVal);
-      const cache = await caches.open("v-cache");
-      if (window.localStorage.getItem("ua")) {
-        const shouldUpdate = window.confirm("install update?");
-        if (shouldUpdate) {
-          getNewUpdate(swReg);
-          await cache?.put("test", new Response(newVal));
-          window.localStorage.removeItem("ua");
-        } else {
-          window.localStorage.setItem("ua", "1");
-        }
-      } else {
-        const oldVal = await (await cache?.match("test"))?.json();
-        console.log("old ver", oldVal);
-        if (String(oldVal) !== String(newVal)) {
-          const shouldUpdate = window.confirm("install update?");
-          if (shouldUpdate) {
-            getNewUpdate(swReg);
-            await cache?.put("test", new Response(newVal));
-            window.localStorage.removeItem("ua");
-          } else {
-            window.localStorage.setItem("ua", "1");
-          }
-        }
-      }
-    })();
+    //   // const newVal = process.env.REACT_APP_V;
+    //   console.log("new ver", newVal);
+    //   const cache = await caches.open("v-cache");
+    //   if (window.localStorage.getItem("ua")) {
+    //     const shouldUpdate = window.confirm("install update?");
+    //     if (shouldUpdate) {
+    //       getNewUpdate(swReg);
+    //       await cache?.put("test", new Response(newVal));
+    //       window.localStorage.removeItem("ua");
+    //     } else {
+    //       window.localStorage.setItem("ua", "1");
+    //     }
+    //   } else {
+    //     const oldVal = await (await cache?.match("test"))?.json();
+    //     console.log("old ver", oldVal);
+    //     if (String(oldVal) !== String(newVal)) {
+    //       const shouldUpdate = window.confirm("install update?");
+    //       if (shouldUpdate) {
+    //         getNewUpdate(swReg);
+    //         await cache?.put("test", new Response(newVal));
+    //         window.localStorage.removeItem("ua");
+    //       } else {
+    //         window.localStorage.setItem("ua", "1");
+    //       }
+    //     }
+    //   }
+    // })();
     // }
   }, []);
 
@@ -107,7 +107,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 24 <code>src/App.js</code> and save to reload.
+          Edit 25 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

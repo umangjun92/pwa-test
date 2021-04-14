@@ -6,21 +6,24 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 const getNewUpdate = async (swReg) => {
   // const x = await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
   // console.log("cahced dele", x)
-  window.location.reload(true);
-
+  // window.location.reload(true);
+  console.log("installing new update");
+  const regWaiting = (await navigator.serviceWorker.ready).waiting;
+  
   // const regWaiting = swReg?.waiting;
-  // console.log("regWaititn", regWaiting)
-  // if (regWaiting) {
-  //   regWaiting.postMessage({ type: "SKIP_WAITING" });
-  //   regWaiting.addEventListener("statechange", (e) => {
-  //     if (e.target?.state === "activated") {
-  //       // const t2 = Date.now();
-  //       // console.log("Reloading now to get the latest version", t2 - t1);
-
-  //       window.location.reload();
-  //     }
-  //   });
-  // }
+  console.log("regWaititn", regWaiting)
+  if (regWaiting) {
+    regWaiting.postMessage({ type: "SKIP_WAITING" });
+    regWaiting.addEventListener("statechange", (e) => {
+      if (e.target?.state === "activated") {
+        // const t2 = Date.now();
+        // console.log("Reloading now to get the latest version", t2 - t1);
+        console.log("update installed");
+        
+        window.location.reload();
+      }
+    });
+  }
 };
 
 function App() {

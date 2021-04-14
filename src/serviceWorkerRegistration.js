@@ -64,7 +64,7 @@ const getNewUpdate = async (regWaiting) => {
   // // const regWaiting = swReg?.waiting;
   console.log("regWaititn", regWaiting);
   if (regWaiting) {
-    regWaiting.postMessage({ type: "SKIP_WAITING" });
+    regWaiting.skipWaiting();
     regWaiting.addEventListener("statechange", (e) => {
       if (e.target?.state === "activated") {
         // const t2 = Date.now();

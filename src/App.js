@@ -7,6 +7,7 @@ const callUpdate = async (newVer, regWaiting) => {
   const shouldUpdate = window.confirm("install update?");
     if (shouldUpdate) {
       getNewUpdate(regWaiting);
+      const cache = await caches.open("v-cache");
       await cache?.put("test", new Response(newVer));
       window.localStorage.removeItem("ua");
     } else {
@@ -65,11 +66,11 @@ function App() {
       // const newVal = process.env.REACT_APP_V;
       console.log("new ver", newVer);
       setLatestVer(newVer)
-      const cache = await caches.open("v-cache");
       if (window.localStorage.getItem("ua")) {
         setIsUpdating(true);
         // callUpdate(newVer, waitingSW)
       } else {
+        const cache = await caches.open("v-cache");
         const oldVal = await (await cache?.match("test"))?.json();
         console.log("old ver", oldVal);
         if (String(oldVal) !== String(newVer)) {

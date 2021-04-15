@@ -54,70 +54,15 @@ export function register(config) {
   }
 }
 
-const getNewUpdate = (regWaiting) => {
-  // const x = await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
-  // console.log("cahced dele", x)
-  // window.location.reload(true);
-  console.log("installing new update");
-  // const reg = (await navigator.serviceWorker.ready);
-  // const regWaiting = reg.waiting || reg.active || reg.installing;
-  // // const regWaiting = swReg?.waiting;
-  console.log("regWaititn", regWaiting);
-  if (regWaiting) {
-    regWaiting.skipWaiting && regWaiting.skipWaiting?.();
-    regWaiting.addEventListener("statechange", (e) => {
-      if (e.target?.state === "activated") {
-        // const t2 = Date.now();
-        // console.log("Reloading now to get the latest version", t2 - t1);
-        console.log("update installed");
-
-        // window.location.reload();
-      }
-    });
-  }
-};
-
 function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(async (registration) => {
-      // if (registration.waiting) {
-        (async () => {
-          const newVal = (
-            await (
-              await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")
-            ).json()
-          ).data.version;
-
-          // const newVal = process.env.REACT_APP_V;
-          console.log("new ver", newVal);
-          const cache = await caches.open("v-cache");
-          if (window.localStorage.getItem("ua")) {
-            const shouldUpdate = window.confirm("install update?");
-            if (shouldUpdate) {
-              getNewUpdate(registration.waiting);
-              cache?.put("test", new Response(newVal));
-              window.localStorage.removeItem("ua");
-            } else {
-              window.localStorage.setItem("ua", "1");
-            }
-          } else {
-            const oldVal = await (await cache?.match("test"))?.json();
-            console.log("old ver", oldVal);
-            if (String(oldVal) !== String(newVal)) {
-              const shouldUpdate = window.confirm("install update?");
-              if (shouldUpdate) {
-                getNewUpdate(registration.waiting);
-                cache?.put("test", new Response(newVal));
-                window.localStorage.removeItem("ua");
-              } else {
-                window.localStorage.setItem("ua", "1");
-              }
-            }
-          }
-        })();
-      // }
-
+      if(registration.waiting){
+        if(config && config.onWaiting){
+          config.onWaiting(registration)
+        }
+      }
       if (navigator.vendor === "Apple Computer, Inc.") {
         console.log("Safari!!!!");
         if (registration.waiting) {

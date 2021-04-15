@@ -12,7 +12,7 @@ const callUpdate = async (newVer, regWaiting) => {
 
 const getNewUpdate = async (regWaiting) => {
   console.log("installing new update");
-  console.log("regWaititn", regWaiting)
+  console.log("regWaititn", regWaiting);
   if (regWaiting) {
     regWaiting.postMessage({ type: "SKIP_WAITING" });
     regWaiting.addEventListener("statechange", (e) => {
@@ -32,6 +32,7 @@ function App() {
   const [waitingSW, setWaitingSW] = useState();
   const [updateReady, setUpdateReady] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [timer, setTimer] = useState(0);
 
   useEffect(() => {
     const t1 = Date.now();
@@ -46,7 +47,7 @@ function App() {
         setWaitingSW(reg.waiting);
       },
       onWaiting: (reg) => {
-        console.log("on waiting", reg)
+        console.log("on waiting", reg);
         setWaitingSW(reg.waiting);
       },
     });
@@ -65,6 +66,9 @@ function App() {
       if (window.localStorage.getItem("ua")) {
         const shouldUpdate = window.confirm("install update?");
         if (shouldUpdate) {
+          setTimeout(() => {
+            setIsUpdating(false);
+          },10000)
           setIsUpdating(true);
         }
         // callUpdate(newVer, waitingSW)
@@ -75,6 +79,9 @@ function App() {
         if (String(oldVal) !== String(newVer)) {
           const shouldUpdate = window.confirm("install update?");
           if (shouldUpdate) {
+            setTimeout(() => {
+              setIsUpdating(false);
+            },10000)
             setIsUpdating(true);
           } else {
             window.localStorage.setItem("ua", "1");
@@ -87,7 +94,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log("waitingSW", waitingSW)
+    console.log("waitingSW", waitingSW);
     if (isUpdating && waitingSW) {
       callUpdate(latestVer, waitingSW);
     }
@@ -97,7 +104,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         {isUpdating ? (
-          <h1>Downloading Update</h1>
+          <h1>Checking for Updates</h1>
         ) : (
           <>
             <img src={logo} className="App-logo" alt="logo" />

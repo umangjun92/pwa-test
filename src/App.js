@@ -94,7 +94,7 @@ function App() {
       <header className="App-header">
         {isUpdating ? <h1>Downloading Update</h1>:<><img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit 32 <code>src/App.js</code> and save to reload.
+          Edit 33 <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"

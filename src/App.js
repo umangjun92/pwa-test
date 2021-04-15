@@ -63,10 +63,11 @@ function App() {
       // const newVal = process.env.REACT_APP_V;
       console.log("new ver", newVer);
       setLatestVer(newVer);
+      const cache = await caches.open("v-cache");
       if (window.localStorage.getItem("ua")) {
         const shouldUpdate = window.confirm("install update?");
         if (shouldUpdate) {
-          setTimeout(() => {
+          setTimeout(async () => {
             setIsUpdating(false);
             await cache?.put("test", new Response(newVer));
           },15000)
@@ -74,13 +75,12 @@ function App() {
         }
         // callUpdate(newVer, waitingSW)
       } else {
-        const cache = await caches.open("v-cache");
         const oldVal = await (await cache?.match("test"))?.json();
         console.log("old ver", oldVal);
         if (String(oldVal) !== String(newVer)) {
           const shouldUpdate = window.confirm("install update?");
           if (shouldUpdate) {
-            setTimeout(() => {
+            setTimeout(async () => {
               setIsUpdating(false);
               await cache?.put("test", new Response(newVer));
             },15000)

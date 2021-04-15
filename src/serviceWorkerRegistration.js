@@ -58,11 +58,11 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(async (registration) => {
-      if(registration.waiting){
+      // if(registration.waiting){
         if(config && config.onWaiting){
           config.onWaiting(registration)
         }
-      }
+      // }
       if (navigator.vendor === "Apple Computer, Inc.") {
         console.log("Safari!!!!");
         if (registration.waiting) {

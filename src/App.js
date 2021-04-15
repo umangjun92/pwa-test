@@ -3,109 +3,95 @@ import logo from "./logo.svg";
 import "./App.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
-const getNewUpdate = async (swReg) => {
-  // const x = await caches.delete(`workbox-precache-v2-${window.location.origin}/`);
-  // console.log("cahced dele", x)
-  // window.location.reload(true);
-  // console.log("installing new update");
-  // const reg = (await navigator.serviceWorker.ready);
-  // const regWaiting = reg.waiting || reg.active || reg.installing;
+const callUpdate = async (newVer, regWaiting) => {
+  const shouldUpdate = window.confirm("install update?");
+    if (shouldUpdate) {
+      getNewUpdate(regWaiting);
+      await cache?.put("test", new Response(newVer));
+      window.localStorage.removeItem("ua");
+    } else {
+      window.localStorage.setItem("ua", "1");
+  }
+}
+
+const getNewUpdate = async (regWaiting) => {
+  console.log("installing new update");
   // // const regWaiting = swReg?.waiting;
   // console.log("regWaititn", regWaiting)
-  // if (regWaiting) {
-  //   regWaiting.postMessage({ type: "SKIP_WAITING" });
-  //   regWaiting.addEventListener("statechange", (e) => {
-  //     if (e.target?.state === "activated") {
-  //       // const t2 = Date.now();
-  //       // console.log("Reloading now to get the latest version", t2 - t1);
-  //       console.log("update installed");
+  if (regWaiting) {
+    regWaiting.postMessage({ type: "SKIP_WAITING" });
+    regWaiting.addEventListener("statechange", (e) => {
+      if (e.target?.state === "activated") {
+        // const t2 = Date.now();
+        // console.log("Reloading now to get the latest version", t2 - t1);
+        console.log("update installed");
         
-  //       // window.location.reload();
-  //     }
-  //   });
-  // }
-};
+        // window.location.reload();
+      }
+    });
+  }
+}
 
 function App() {
-  const [swReg, setSwReg] = useState();
+  const [waitingSW, setWaitingSW] = useState();
+  const [isUpdating, setIsUpdating] = useState();
+  const [latestVer, setLatestVer] = useState();
 
-  // useEffect(() => {
-  //   const t1 = Date.now();
-  //   serviceWorkerRegistration.register({
-  //     onSuccess: (reg) => {
-  //       setSwReg(reg);
-  //       console.log("reg", reg);
-  //       const t2 = Date.now();
-  //       console.log("time to success", t2 -t1)
-  //     },
-  //     //   // onUpdate: async (reg) => {
-  //     //   //   const t1 = Date.now();
-  //     //   //   console.log("New update avalaible");
-  //     //   //   const cache = await caches.open("v-cache");
-  //     //   //   const oldVal = (await (await cache?.match("test"))?.json());
-  //     //   //   await cache?.put("test", new Response(oldVal ? Number(oldVal) +1 : 1))
-  //     //   //   const shouldUpdate = window.confirm("Update");
-  //     //   //   if(shouldUpdate){
-  //     //   //     const registrationWaiting = reg.waiting;
-  //     //   //     if (registrationWaiting) {
-  //     //   //       registrationWaiting.postMessage({ type: "SKIP_WAITING" });
-  //     //   //       registrationWaiting.addEventListener("statechange", (e) => {
-  //     //   //         if (e.target?.state === "activated") {
-  //     //   //           const t2 = Date.now();
-  //     //   //           console.log("Reloading now to get the latest version", t2 - t1);
-
-  //     //   //           window.location.reload();
-  //     //   //         }
-  //     //   //       });
-  //     //   //     }
-  //     //   //   }else {
-  //     //   //     window.localStorage.setItem("ua", "1")
-  //     //   //   }
-  //     //   // },
-  //   });
-  // }, []);
+  useEffect(() => {
+    const t1 = Date.now();
+    serviceWorkerRegistration.register({
+      // onSuccess: (reg) => {
+      //   setSwReg(reg);
+      //   console.log("reg", reg);
+      //   const t2 = Date.now();
+      //   console.log("time to success", t2 -t1)
+      // },
+        onUpdate:  (reg) => {
+          setWaitingSW(reg.waiting)
+        },
+        onWaiting: (reg) => {
+          setWaitingSW(reg.waiting)
+        }
+    });
+  }, []);
 
   useEffect(() => {
     // if(swReg){
-    // (async () => {
-    //   const newVal = (await (
-    //     await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")
-    //   ).json()).data.version;
+    (async () => {
+      const newVer = (await (
+        await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")
+      ).json()).data.version;
 
-    //   // const newVal = process.env.REACT_APP_V;
-    //   console.log("new ver", newVal);
-    //   const cache = await caches.open("v-cache");
-    //   if (window.localStorage.getItem("ua")) {
-    //     const shouldUpdate = window.confirm("install update?");
-    //     if (shouldUpdate) {
-    //       getNewUpdate(swReg);
-    //       await cache?.put("test", new Response(newVal));
-    //       window.localStorage.removeItem("ua");
-    //     } else {
-    //       window.localStorage.setItem("ua", "1");
-    //     }
-    //   } else {
-    //     const oldVal = await (await cache?.match("test"))?.json();
-    //     console.log("old ver", oldVal);
-    //     if (String(oldVal) !== String(newVal)) {
-    //       const shouldUpdate = window.confirm("install update?");
-    //       if (shouldUpdate) {
-    //         getNewUpdate(swReg);
-    //         await cache?.put("test", new Response(newVal));
-    //         window.localStorage.removeItem("ua");
-    //       } else {
-    //         window.localStorage.setItem("ua", "1");
-    //       }
-    //     }
-    //   }
-    // })();
+      // const newVal = process.env.REACT_APP_V;
+      console.log("new ver", newVer);
+      setLatestVer(newVer)
+      const cache = await caches.open("v-cache");
+      if (window.localStorage.getItem("ua")) {
+        setIsUpdating(true);
+        // callUpdate(newVer, waitingSW)
+      } else {
+        const oldVal = await (await cache?.match("test"))?.json();
+        console.log("old ver", oldVal);
+        if (String(oldVal) !== String(newVer)) {
+          setIsUpdating(true)
+          // callUpdate(newVer,waitingSW)
+        }
+      }
+    })();
     // }
   }, []);
+
+  useEffect(() => {
+    if(isUpdating && waitingSW){
+      callUpdate(latestVer, waitingSW)
+    }
+
+  },[isUpdating, waitingSW])
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        {isUpdating ? <h1>Downloading Update</h1>:<><img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit 32 <code>src/App.js</code> and save to reload.
         </p>
@@ -116,7 +102,7 @@ function App() {
           rel="noopener noreferrer"
         >
           Learn React
-        </a>
+        </a></>}
       </header>
     </div>
   );

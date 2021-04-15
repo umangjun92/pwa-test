@@ -68,7 +68,8 @@ function App() {
         if (shouldUpdate) {
           setTimeout(() => {
             setIsUpdating(false);
-          },10000)
+            await cache?.put("test", new Response(newVer));
+          },15000)
           setIsUpdating(true);
         }
         // callUpdate(newVer, waitingSW)
@@ -81,7 +82,8 @@ function App() {
           if (shouldUpdate) {
             setTimeout(() => {
               setIsUpdating(false);
-            },10000)
+              await cache?.put("test", new Response(newVer));
+            },15000)
             setIsUpdating(true);
           } else {
             window.localStorage.setItem("ua", "1");
@@ -109,7 +111,7 @@ function App() {
           <>
             <img src={logo} className="App-logo" alt="logo" />
             <p>
-              Edit 42 <code>src/App.js</code> and save to reload.
+              Edit 43 <code>src/App.js</code> and save to reload.
             </p>
             <a
               className="App-link"

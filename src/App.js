@@ -4,16 +4,11 @@ import "./App.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const callUpdate = async (newVer, regWaiting) => {
-  const shouldUpdate = window.confirm("install update?");
-    if (shouldUpdate) {
-      getNewUpdate(regWaiting);
-      const cache = await caches.open("v-cache");
-      await cache?.put("test", new Response(newVer));
-      window.localStorage.removeItem("ua");
-    } else {
-      window.localStorage.setItem("ua", "1");
-  }
-}
+  getNewUpdate(regWaiting);
+  const cache = await caches.open("v-cache");
+  await cache?.put("test", new Response(newVer));
+  window.localStorage.removeItem("ua");
+};
 
 const getNewUpdate = async (regWaiting) => {
   console.log("installing new update");
@@ -26,17 +21,18 @@ const getNewUpdate = async (regWaiting) => {
         // const t2 = Date.now();
         // console.log("Reloading now to get the latest version", t2 - t1);
         console.log("update installed");
-        
+
         // window.location.reload();
       }
     });
   }
-}
+};
 
 function App() {
-  const [waitingSW, setWaitingSW] = useState();
-  const [isUpdating, setIsUpdating] = useState();
   const [latestVer, setLatestVer] = useState();
+  const [waitingSW, setWaitingSW] = useState();
+  const [updateReady, setUpdateReady] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     const t1 = Date.now();
@@ -47,34 +43,42 @@ function App() {
       //   const t2 = Date.now();
       //   console.log("time to success", t2 -t1)
       // },
-        onUpdate:  (reg) => {
-          setWaitingSW(reg.waiting)
-        },
-        onWaiting: (reg) => {
-          setWaitingSW(reg.waiting)
-        }
+      onUpdate: (reg) => {
+        setWaitingSW(reg.waiting);
+      },
+      onWaiting: (reg) => {
+        setWaitingSW(reg.waiting);
+      },
     });
   }, []);
 
   useEffect(() => {
     // if(swReg){
     (async () => {
-      const newVer = (await (
-        await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")
-      ).json()).data.version;
+      const newVer = (
+        await (await fetch("https://sh-dev.vahak.in/v1/vr/gt?k=test")).json()
+      ).data.version;
 
       // const newVal = process.env.REACT_APP_V;
       console.log("new ver", newVer);
-      setLatestVer(newVer)
+      setLatestVer(newVer);
       if (window.localStorage.getItem("ua")) {
-        setIsUpdating(true);
+        const shouldUpdate = window.confirm("install update?");
+        if (shouldUpdate) {
+          setIsUpdating(true);
+        }
         // callUpdate(newVer, waitingSW)
       } else {
         const cache = await caches.open("v-cache");
         const oldVal = await (await cache?.match("test"))?.json();
         console.log("old ver", oldVal);
         if (String(oldVal) !== String(newVer)) {
-          setIsUpdating(true)
+          const shouldUpdate = window.confirm("install update?");
+          if (shouldUpdate) {
+            setIsUpdating(true);
+          } else {
+            window.localStorage.setItem("ua", "1");
+          }
           // callUpdate(newVer,waitingSW)
         }
       }
@@ -83,27 +87,32 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if(isUpdating && waitingSW){
-      callUpdate(latestVer, waitingSW)
+    if (isUpdating && waitingSW) {
+      callUpdate(latestVer, waitingSW);
     }
-
-  },[isUpdating, waitingSW])
+  }, [isUpdating, waitingSW]);
 
   return (
     <div className="App">
       <header className="App-header">
-        {isUpdating ? <h1>Downloading Update</h1>:<><img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit 33 <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a></>}
+        {isUpdating ? (
+          <h1>Downloading Update</h1>
+        ) : (
+          <>
+            <img src={logo} className="App-logo" alt="logo" />
+            <p>
+              Edit 33 <code>src/App.js</code> and save to reload.
+            </p>
+            <a
+              className="App-link"
+              href="https://reactjs.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn React
+            </a>
+          </>
+        )}
       </header>
     </div>
   );

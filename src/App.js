@@ -64,33 +64,33 @@ function App() {
       console.log("new ver", newVer);
       setLatestVer(newVer);
       const cache = await caches.open("v-cache");
-      if (window.localStorage.getItem("ua")) {
-        const shouldUpdate = window.confirm("install update?");
-        if (shouldUpdate) {
-          setTimeout(async () => {
-            setIsUpdating(false);
-            await cache?.put("test", new Response(newVer));
-          },15000)
-          setIsUpdating(true);
-        }
-        // callUpdate(newVer, waitingSW)
-      } else {
-        const oldVal = await (await cache?.match("test"))?.json();
-        console.log("old ver", oldVal);
-        if (String(oldVal) !== String(newVer)) {
-          const shouldUpdate = window.confirm("install update?");
-          if (shouldUpdate) {
-            setTimeout(async () => {
-              setIsUpdating(false);
-              await cache?.put("test", new Response(newVer));
-            },15000)
-            setIsUpdating(true);
-          } else {
-            window.localStorage.setItem("ua", "1");
-          }
-          // callUpdate(newVer,waitingSW)
-        }
+      // if (window.localStorage.getItem("ua")) {
+      //   const shouldUpdate = window.confirm("install update?");
+      //   if (shouldUpdate) {
+      //     setTimeout(async () => {
+      //       setIsUpdating(false);
+      //       await cache?.put("test", new Response(newVer));
+      //     },15000)
+      //     setIsUpdating(true);
+      //   }
+      //   // callUpdate(newVer, waitingSW)
+      // } else {
+      const oldVal = await (await cache?.match("test"))?.json();
+      console.log("old ver", oldVal);
+      if (String(oldVal) !== String(newVer)) {
+        // const shouldUpdate = window.confirm("install update?");
+        // if (shouldUpdate) {
+        setTimeout(async () => {
+          setIsUpdating(false);
+          await cache?.put("test", new Response(newVer));
+        }, 15000);
+        setIsUpdating(true);
+        // } else {
+        //   window.localStorage.setItem("ua", "1");
+        // }
+        // callUpdate(newVer,waitingSW)
       }
+      // }
     })();
     // }
   }, []);
@@ -98,7 +98,10 @@ function App() {
   useEffect(() => {
     console.log("waitingSW", waitingSW);
     if (isUpdating && waitingSW) {
-      callUpdate(latestVer, waitingSW);
+      const shouldUpdate = window.confirm("Install Update?");
+      if(shouldUpdate){
+        callUpdate(latestVer, waitingSW);
+      }
     }
   }, [isUpdating, waitingSW]);
 
@@ -112,7 +115,6 @@ function App() {
             <img src={logo} className="App-logo" alt="logo" />
             <p>
               Edit 44 <code>src/App.js</code> and save to reload.
-            
             </p>
             <a
               className="App-link"

@@ -12,8 +12,7 @@ const callUpdate = async (newVer, regWaiting) => {
 
 const getNewUpdate = async (regWaiting) => {
   console.log("installing new update");
-  // // const regWaiting = swReg?.waiting;
-  // console.log("regWaititn", regWaiting)
+  console.log("regWaititn", regWaiting)
   if (regWaiting) {
     regWaiting.postMessage({ type: "SKIP_WAITING" });
     regWaiting.addEventListener("statechange", (e) => {
@@ -47,6 +46,7 @@ function App() {
         setWaitingSW(reg.waiting);
       },
       onWaiting: (reg) => {
+        console.log("on waiting", reg)
         setWaitingSW(reg.waiting);
       },
     });
@@ -87,6 +87,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log("waitingSW", waitingSW)
     if (isUpdating && waitingSW) {
       callUpdate(latestVer, waitingSW);
     }
